@@ -1,0 +1,320 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262.1 83.3% 57.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+  }
+
+  /* Focus styles */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-primary/20 text-primary-foreground;
+  }
+}
+
+@layer components {
+  /* Gaming-themed components */
+  .gaming-card {
+    @apply bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-purple-400/30 rounded-2xl shadow-2xl;
+  }
+
+  .mood-slider-track {
+    @apply bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-full;
+  }
+
+  .mood-slider-thumb {
+    @apply bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg border-2 border-white dark:border-gray-800;
+  }
+
+  .wellness-gradient {
+    @apply bg-gradient-to-br from-green-400 via-blue-500 to-purple-600;
+  }
+
+  .gaming-gradient {
+    @apply bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500;
+  }
+
+  .mood-gradient {
+    @apply bg-gradient-to-br from-orange-400 via-red-500 to-pink-500;
+  }
+
+  /* Accessibility improvements */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .focus-visible {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  /* Gaming UI elements */
+  .gaming-button {
+    @apply relative overflow-hidden bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+  }
+
+  .gaming-button::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 transition-opacity duration-300;
+  }
+
+  .gaming-button:hover::before {
+    @apply opacity-100;
+  }
+
+  .gaming-button > * {
+    @apply relative z-10;
+  }
+
+  /* Mood indicator styles */
+  .mood-indicator {
+    @apply inline-flex items-center justify-center w-8 h-8 rounded-full text-white font-bold text-sm;
+  }
+
+  .mood-energy { @apply bg-gradient-to-r from-orange-400 to-red-500; }
+  .mood-stress { @apply bg-gradient-to-r from-red-400 to-pink-500; }
+  .mood-focus { @apply bg-gradient-to-r from-purple-400 to-indigo-500; }
+  .mood-social { @apply bg-gradient-to-r from-blue-400 to-cyan-500; }
+  .mood-challenge { @apply bg-gradient-to-r from-green-400 to-emerald-500; }
+
+  /* Wellness status indicators */
+  .wellness-excellent { @apply text-green-500 bg-green-50 dark:bg-green-900/20; }
+  .wellness-good { @apply text-blue-500 bg-blue-50 dark:bg-blue-900/20; }
+  .wellness-fair { @apply text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20; }
+  .wellness-poor { @apply text-red-500 bg-red-50 dark:bg-red-900/20; }
+
+  /* Gaming platform indicators */
+  .platform-pc { @apply bg-blue-500 text-white; }
+  .platform-playstation { @apply bg-blue-600 text-white; }
+  .platform-xbox { @apply bg-green-500 text-white; }
+  .platform-nintendo { @apply bg-red-500 text-white; }
+  .platform-mobile { @apply bg-purple-500 text-white; }
+  .platform-web { @apply bg-gray-500 text-white; }
+
+  /* Accessibility features */
+  .high-contrast {
+    @apply border-2 border-black dark:border-white;
+  }
+
+  .reduced-motion {
+    @apply motion-reduce:animate-none;
+  }
+
+  .focus-trap {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities for GameMood */
+  .text-gaming {
+    @apply font-gaming tracking-wider;
+  }
+
+  .bg-gaming-pattern {
+    background-image: 
+      linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .glass-effect {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20;
+  }
+
+  .mood-glow {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+
+  .wellness-glow {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .gaming-glow {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+  }
+
+  /* Responsive text scaling */
+  .text-responsive {
+    @apply text-sm sm:text-base md:text-lg lg:text-xl;
+  }
+
+  /* Mood dimension colors */
+  .mood-energy-bg { @apply bg-gradient-to-r from-orange-400 to-red-500; }
+  .mood-stress-bg { @apply bg-gradient-to-r from-red-400 to-pink-500; }
+  .mood-focus-bg { @apply bg-gradient-to-r from-purple-400 to-indigo-500; }
+  .mood-social-bg { @apply bg-gradient-to-r from-blue-400 to-cyan-500; }
+  .mood-challenge-bg { @apply bg-gradient-to-r from-green-400 to-emerald-500; }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes moodGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+  }
+}
+
+@keyframes gamingPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break {
+    page-break-before: always;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .gaming-card {
+    @apply border-2 border-white;
+  }
+  
+  .mood-slider-thumb {
+    @apply border-4 border-white;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
