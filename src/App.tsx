@@ -20,8 +20,9 @@ import CommunityPage from './pages/Community'
 import WellnessPage from './pages/Wellness'
 import NotFoundPage from './pages/NotFound'
 
-// Loading Component
+// UI Components
 import LoadingScreen from './components/ui/LoadingScreen'
+import ErrorBoundary from './components/ui/ErrorBoundary'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -32,97 +33,112 @@ function App() {
     const initialize = async () => {
       try {
         await dispatch(initializeApp())
-        if (localStorage.getItem('userToken')) {
+        if (typeof window !== 'undefined' && localStorage.getItem('userToken')) {
           await dispatch(loadUserProfile())
         }
       } catch (error) {
         console.error('Failed to initialize app:', error)
+        // Force initialization to complete even if there's an error
+        dispatch({ type: 'app/initialize/fulfilled', payload: { theme: 'auto', language: 'en', timezone: 'UTC' } })
       }
     }
 
     initialize()
   }, [dispatch])
 
+  // Add a timeout to prevent infinite loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isInitialized) {
+        dispatch({ type: 'app/initialize/fulfilled', payload: { theme: 'auto', language: 'en', timezone: 'UTC' } })
+      }
+    }, 3000) // 3 second timeout
+
+    return () => clearTimeout(timer)
+  }, [isInitialized, dispatch])
+
   if (!isInitialized || isLoading) {
     return <LoadingScreen />
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900">
-      <AnimatePresence mode="wait">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/onboarding" element={<OnboardingPage />} />
-          
-          {/* Protected Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <DashboardPage />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/recommendations"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <RecommendationsPage />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <ProfilePage />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wellness"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <WellnessPage />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/community"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <CommunityPage />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <SettingsPage />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          
-          {/* Fallback Routes */}
-          <Route path="/404" element={<NotFoundPage />} />
-          <Route path="*" element={<Navigate to="/404" replace />} />
-        </Routes>
-      </AnimatePresence>
-    </div>
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900">
+        <AnimatePresence mode="wait">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            
+            {/* Protected Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <DashboardPage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/recommendations"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <RecommendationsPage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ProfilePage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wellness"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <WellnessPage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/community"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <CommunityPage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SettingsPage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* Fallback Routes */}
+            <Route path="/404" element={<NotFoundPage />} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
+          </Routes>
+        </AnimatePresence>
+      </div>
+    </ErrorBoundary>
   )
 }
 

@@ -7,7 +7,7 @@ const initialState: AppState = {
   error: null,
   theme: 'auto',
   language: 'en',
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'UTC',
 }
 
 // Async thunks
@@ -15,6 +15,15 @@ export const initializeApp = createAsyncThunk(
   'app/initialize',
   async (_, { rejectWithValue }) => {
     try {
+      // Check if we're in a browser environment
+      if (typeof window === 'undefined') {
+        return {
+          theme: 'auto',
+          language: 'en',
+          timezone: 'UTC',
+        }
+      }
+
       // Initialize app settings from localStorage
       const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'auto' || 'auto'
       const savedLanguage = localStorage.getItem('language') || 'en'
@@ -33,7 +42,13 @@ export const initializeApp = createAsyncThunk(
         timezone: savedTimezone,
       }
     } catch (error) {
-      return rejectWithValue('Failed to initialize app')
+      console.error('App initialization error:', error)
+      // Return default values instead of rejecting
+      return {
+        theme: 'auto',
+        language: 'en',
+        timezone: 'UTC',
+      }
     }
   }
 )
